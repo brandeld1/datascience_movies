@@ -34,18 +34,18 @@ df1 = df1.merge(df3, on='movieId')
 df1.insert(5,'sentiment',0,True)
 
 #for testing to make the dataset smaller, delete later
-df1 = df1.iloc[40000:,]
  
  #creating a year column
+wholeNumbers=['0','1','2','3','4','5','6','7','8','9']
 number=""
 df1.insert(2,'year',0,True)
 for ind in df1.index:
-    if(ind-40000!=0 and number!=''):
-                number[slice(len(number)-4, len(number))]
-                df1.iloc[ind-40000-1,2]=float(number)
-                number=""
-    for character in df1.iloc[ind-40000,1]:
-        if character.isnumeric():
+    if(ind!=0 and number!=''):
+            number[slice(len(number)-4, len(number))]
+            df1.iloc[ind-1,2]=float(number)
+            number=""
+    for character in df1.iloc[ind,1]:
+        if character in wholeNumbers:
             number+=character
 
 
@@ -56,15 +56,14 @@ sia = SentimentIntensityAnalyzer()
 #for creating Sentiment scores
 sentimentSum=0
 for ind in df1.index:
-        if(ind-40000!=0):
-            df1.iloc[ind-40000-1,6]=sentimentSum
+        if(ind!=0):
+            df1.iloc[ind-1,6]=sentimentSum
         sentimentSum=0
-        for word in df1.iloc[ind-40000,5]:
-            sentimentSum+=round(sia.polarity_scores(word)['compound'],1)
+        for word in df1.iloc[ind,5]:
+            sentimentSum+=round(sia.polarity_scores(str(word))['compound'],1)
 
 print(df1.head())
-
-
+print(df1.info())
 
 
 
