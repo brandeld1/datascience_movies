@@ -1,7 +1,7 @@
 import pandas as pd
-import nltk
 
 """"
+import nltk
 nltk.download()
 nltk.download([
      "names",
@@ -62,9 +62,44 @@ for ind in df1.index:
         for word in df1.iloc[ind,5]:
             sentimentSum+=round(sia.polarity_scores(str(word))['compound'],1)
 
-print(df1.head())
-print(df1.info())
 
+#separate genres
+dummies=df1['genres'].str.get_dummies()
+tidy_movie_ratings=(pd.concat([df1, dummies], axis=1)
+                    .drop(["movieId", "tag", "genres"], axis=1)
+                )
+#remove year from movie title
+import re
+start = "("
+end = ")"
+tidy_movie_ratings['title'] = tidy_movie_ratings['title'].str.replace(fr'(?s){re.escape(start)}.*?{re.escape(end)}', '', regex=True)
+#tidy_movie_ratings.reset_index(inplace=True)
+
+#finding most popular genre
+genre_rank = (tidy_movie_ratings.iloc[:, 5:] # get the genre columns only
+              .sum() # sum them up
+              .sort_values(ascending=False) # sort descending
+              .head(1)
+              .index.values # get the genre names
+              )
+
+column_to_move = tidy_movie_ratings.pop("year")
+
+#find most popular movie within a year
+x=int(input("Enter a year within 1995 and 2018: "))
+
+tidy_movie_ratings.insert(4, "year", column_to_move)
+
+genre_groups = (tidy_movie_ratings.iloc[:, 4:]
+                .groupby("year")
+                .sum()
+               ).loc[x, genre_rank]
+
+
+#test
+print(genre_groups)
+#print(df1.head())
+#print(df1.info())
 
 
 
