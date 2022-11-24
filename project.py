@@ -41,7 +41,7 @@ number=""
 df1.insert(2,'year',0,True)
 for ind in df1.index:
     if(ind!=0 and number!=''):
-            number[slice(len(number)-4, len(number))]
+            number=number[-4:]
             df1.iloc[ind-1,2]=float(number)
             number=""
     for character in df1.iloc[ind,1]:
