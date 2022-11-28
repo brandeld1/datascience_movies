@@ -24,11 +24,11 @@ public class test {
       itr.nextToken();
       while(itr.hasMoreTokens()) {
 	    	  String data[] = itr.nextToken().toString().split(",");
-	    	  if(data.length>=4) {
+	    	  if(data.length>=5) {
 		          String genres = data[2];
-		          DoubleWritable ratings = new DoubleWritable(Double.parseDouble(data[3]));
+		          DoubleWritable sentiment = new DoubleWritable(Double.parseDouble(data[4]));
 		          word.set(genres);
-		          context.write(word, ratings);
+		          context.write(word, sentiment);
 	    	  }
 	    }
     }
