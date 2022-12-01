@@ -25,10 +25,18 @@ public class test {
       while(itr.hasMoreTokens()) {
 	    	  String data[] = itr.nextToken().toString().split(",");
 	    	  if(data.length>=5) {
-		          String genres = data[2];
-		          DoubleWritable sentiment = new DoubleWritable(Double.parseDouble(data[4]));
-		          word.set(genres);
-		          context.write(word, sentiment);
+		          String genresList = data[2];
+		          String[] genres = genresList.toString().split("\\|");
+
+		          //DoubleWritable sentiment = new DoubleWritable(Double.parseDouble(data[4])); this is for gathering the sentiment
+
+		          DoubleWritable one = new DoubleWritable(1);
+		          //word.set(genres[0]);
+		          for(int i=0;i<genres.length;i++){
+		        	  String yeargenre = data[1]+","+genres[i];
+		        	  word.set(yeargenre);
+		        	  context.write(word, one);
+		          }
 	    	  }
 	    }
     }
@@ -42,12 +50,12 @@ public class test {
                        Context context
                        ) throws IOException, InterruptedException {
       double sum = 0;
-      int total = 0;
+      //int total = 0;
       for (DoubleWritable val : values) {
         sum += val.get();
-        total += 1;
+        //total += 1;
       }
-      result.set(sum/total);
+      result.set(sum);
       context.write(key, result);
     }
   }
