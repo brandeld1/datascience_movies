@@ -13,6 +13,8 @@ nltk.download([
      "vader_lexicon",
      "punkt",
 ])
+
+hadoop jar C:/hadoop/share/hadoop/mapreduce/test.jar test /cleanedMovieData2.csv /newOutput101.txt
 """
 
 #get the datasets
