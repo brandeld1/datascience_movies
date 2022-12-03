@@ -15,6 +15,7 @@ df1 = df1.merge(df3, on=['genre','year'])
 
 df1 = pd.read_csv("combinedMRData.csv")
 
+"""
 df1.replace(to_replace='Action', value=1, inplace=True)
 df1.replace(to_replace='Adventure', value=2, inplace=True)
 df1.replace(to_replace='Animation', value=3, inplace=True)
@@ -35,7 +36,7 @@ df1.replace(to_replace='Thriller', value=17, inplace=True)
 df1.replace(to_replace='War', value=18, inplace=True)
 df1.replace(to_replace='Western', value=19, inplace=True)
 
-
+"""
 
 label=[]
 allFeatures =[]
@@ -48,7 +49,7 @@ saved_rating = 0
 
 for ind in df1.index:
     if(df1.iloc[ind,0]!=current_year):
-        allFeatures.append([current_year,saved_rating,saved_sentiment,max_count])
+        allFeatures.append([current_year,saved_rating,saved_sentiment,round(max_count)])
         label.append(saved_genre)
         max_count=0
         current_year = df1.iloc[ind,0]
@@ -57,15 +58,26 @@ for ind in df1.index:
             max_count = df1.iloc[ind,4]
             saved_genre = df1.iloc[ind,1]
             saved_rating = round(float(df1.iloc[ind,2]),1)
-            if(df1.iloc[ind,4]>0):
+            #saved_sentiment = round(float(df1.iloc[ind,3]),1)
+            if(df1.iloc[ind,3]>0):
                 saved_sentiment = 1
-            elif(df1.iloc[ind,4]<0):
+            elif(df1.iloc[ind,3]<0):
                 saved_sentiment = -1
-            elif(df1.iloc[ind,4]==0):
+            elif(df1.iloc[ind,3]==0):
                 saved_sentiment = 0
 
 print(label)
 print(allFeatures)
+
+f = open("highest_count_genre_per_year.csv", "w")
+for i in range(len(label)):
+    f.write(str(label[i]))
+    f.write(",")
+    f.write(str(allFeatures[i][0])+","+str(allFeatures[i][1])+","+str(allFeatures[i][2])+","+str(allFeatures[i][3]))
+    f.write('\n')
+    
+
+f.close()
 
     #if(df1.iloc[ind,4]>=0):
     #    popularity=0
