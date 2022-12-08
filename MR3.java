@@ -25,17 +25,13 @@ public class test {
       while(itr.hasMoreTokens()) {
 	    	  String data[] = itr.nextToken().toString().split(",");
 	    	  if(data.length>=5) {
-		          String genresList = data[2];
-		          String[] genres = genresList.toString().split("\\|");
-
-		          //DoubleWritable sentiment = new DoubleWritable(Double.parseDouble(data[4])); this is for gathering the sentiment
-
-		          DoubleWritable one = new DoubleWritable(1);
-		          //word.set(genres[0]);
+		          String genresList = data[2];  // get the list of genres
+		          String[] genres = genresList.toString().split("\\|"); // split the list of genres
+		          DoubleWritable rating = new DoubleWritable(Double.parseDouble(data[3])); //get the rating
 		          for(int i=0;i<genres.length;i++){
-		        	  String yeargenre = data[1]+","+genres[i];
-		        	  word.set(yeargenre);
-		        	  context.write(word, one);
+		        	  String yeargenre = data[1]+","+genres[i]; //get the year and genre for each in the list
+		        	  word.set(yeargenre); //set the word
+		        	  context.write(word, rating); //write the word and rating to context
 		          }
 	    	  }
 	    }
@@ -50,13 +46,13 @@ public class test {
                        Context context
                        ) throws IOException, InterruptedException {
       double sum = 0;
-      //int total = 0;
+      int total = 0;
       for (DoubleWritable val : values) {
-        sum += val.get();
-        //total += 1;
+        sum += val.get(); //get the ratings summed
+        total += 1; // get the number of occurences
       }
-      result.set(sum);
-      context.write(key, result);
+      result.set(sum/total); //get the average
+      context.write(key, result); //write the key and average to context
     }
   }
 
