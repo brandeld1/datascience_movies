@@ -98,11 +98,8 @@ genre_groups = (tidy_movie_ratings.iloc[:, 4:]
                ).loc[x, genre_rank]
 
 
-#test
-print(genre_groups)
+#output to a file
 #df1.to_csv('cleanedMovieData.csv', index=False)
-#print(df1.head())
-#print(df1.info())
 
 
 
